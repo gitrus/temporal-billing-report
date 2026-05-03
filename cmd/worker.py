@@ -7,7 +7,7 @@ from temporalio.contrib.pydantic import pydantic_data_converter
 
 from src.domain.workflow.workflow import BillingReportWorkflow
 from src.temporal.names import TASK_QUEUE
-from src.transport.activities.activities import fetch_invoice_data, generate_report
+from src.transport.activities.activities import fetch_invoice_data, generate_report, validate_invoices
 
 
 async def run_worker(task_queue: str) -> None:
@@ -19,7 +19,7 @@ async def run_worker(task_queue: str) -> None:
         client,
         task_queue=task_queue,
         workflows=[BillingReportWorkflow],
-        activities=[fetch_invoice_data, generate_report],
+        activities=[fetch_invoice_data, validate_invoices, generate_report],
     )
     print(f"Worker started on task queue '{task_queue}'")
     await worker.run()

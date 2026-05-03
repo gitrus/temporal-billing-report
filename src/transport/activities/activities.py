@@ -1,4 +1,5 @@
 from temporalio import activity
+from temporalio.exceptions import ApplicationError
 
 from src.temporal.names import ActivityName
 from src.transport.activities import schema as schm
@@ -16,6 +17,17 @@ async def fetch_invoice_data(
             schm.Invoice(id="inv-002", customer="Globex", amount=850.50),
         ]
     )
+
+
+@activity.defn(name=ActivityName.validate_invoices)
+async def validate_invoices(
+    request: schm.ValidateInvoicesRequest,
+) -> schm.FetchInvoiceDataResponse:
+    attempt = activity.info().attempt
+    activity.logger.info("Validating invoices, attempt %d", attempt)
+    if attempt < 3:
+        raise ApplicationError(f"Validation service unavailable (attempt {attempt})")
+    return schm.FetchInvoiceDataResponse(invoices=request.invoices)
 
 
 @activity.defn(name=ActivityName.generate_report)

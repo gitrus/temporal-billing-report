@@ -16,6 +16,10 @@ class FetchInvoiceDataResponse(BaseModel):
     invoices: list[Invoice]
 
 
+class ValidateInvoicesRequest(BaseModel):
+    invoices: list[Invoice]
+
+
 class GenerateReportRequest(BaseModel):
     invoices: list[Invoice]
 

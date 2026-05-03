@@ -9,4 +9,5 @@ class WorkflowName(StrEnum):
 
 class ActivityName(StrEnum):
     fetch_invoice_data = auto()
+    validate_invoices = auto()
     generate_report = auto()
